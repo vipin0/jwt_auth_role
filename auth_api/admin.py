@@ -17,11 +17,12 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email',
-                  'first_name',
-                  'last_name',
-                  'role',
-                  )
+        fields = '__all__'
+        # fields = ('email',
+        #           'first_name',
+        #           'last_name',
+        #           'role',
+        #           )
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -71,14 +72,14 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_admin',)}),
+        ('Permissions', {'fields': ('is_admin', 'role')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
+            'fields': ('first_name', 'last_name', 'email', 'password1', 'password2', 'role'),
         }),
     )
     search_fields = ('email',)
