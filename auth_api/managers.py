@@ -7,9 +7,10 @@ class CustomUserManager(BaseUserManager):
     Custom user model where the email address is the unique identifier
     and has an is_admin field to allow access to the admin app 
     """
+
     def create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError(_("The email must be set"))
+            raise ValueError(_("Users must have an email address"))
         if not password:
             raise ValueError(_("The password must be set"))
         email = self.normalize_email(email)
@@ -26,6 +27,6 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get('role') != 1:
             raise ValueError('Superuser must have role of Global Admin')
         user = self.create_user(email, password, **extra_fields)
-        user.is_staff = True
+        user.is_admin = True
         user.is_superuser = True
         return user

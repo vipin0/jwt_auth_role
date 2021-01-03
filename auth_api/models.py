@@ -8,6 +8,8 @@ from django.utils import timezone
 from .managers import CustomUserManager
 
 # Create your models here.
+
+
 class User(AbstractBaseUser, PermissionsMixin):
 
     # These fields tie to the roles!
@@ -25,14 +27,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'user'
         verbose_name_plural = 'users'
 
-    uid = models.UUIDField(unique=True, editable=False, default=uuid.uuid4, verbose_name='Public identifier')
-    email = models.EmailField(unique=True,verbose_name="email")
+    uid = models.UUIDField(unique=True, editable=False,
+                           default=uuid.uuid4, verbose_name='Public identifier')
+    email = models.EmailField(unique=True, verbose_name="email")
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
-    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, default=7)
-    is_staff = models.BooleanField(default=False)
+    role = models.PositiveSmallIntegerField(
+        choices=ROLE_CHOICES, blank=True, null=True, default=7)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
     created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(default=timezone.now)
@@ -49,3 +53,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return self.first_name+" "+self.last_name
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
