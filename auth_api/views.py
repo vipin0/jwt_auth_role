@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from django.shortcuts import render
 from .serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
@@ -10,6 +10,8 @@ from .serializers import (
 )
 
 from .models import User
+
+from django.views import View
 
 
 class UserRegistrationView(APIView):
@@ -82,5 +84,16 @@ class UserListView(APIView):
 
             }
             return Response(response, status=status.HTTP_200_OK)
+
+def home(request):
+    template_name = 'index.html'
+    return render(request,template_name)
+
+class HomepageView(View):
+    template_name = 'index.html'
+
+    def get(self,request,*args,**kwargs):
+        return render(request,self.template_name)
+
 
 

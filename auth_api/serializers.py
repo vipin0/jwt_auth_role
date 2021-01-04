@@ -55,14 +55,16 @@ class UserLoginSerializer(serializers.Serializer):
             }
 
             return validation
-        except AuthUser.DoesNotExist:
+        except User.DoesNotExist:
             raise serializers.ValidationError("Invalid login credentials")
 
 
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            'email',
-            'role'
-        )
+        # fields = '__all__'
+        exclude = ['password']
+        # fields = (
+        #     'email',
+        #     'role'
+        # )
